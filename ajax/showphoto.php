@@ -24,46 +24,20 @@
 OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('user_photo');
 
-$owner = OC_Util::sanitizeHTML($_GET['user']) ;
+$user = isset($_GET['user']) ? $_GET['user'] : '';
 
 $query = OCP\DB::prepare("SELECT configvalue FROM *PREFIX*preferences WHERE userid = ? AND appid = ? AND configkey = ? LIMIT 1");
-$result = $query->execute(array($owner,'photo','path'))->fetchAll();
+$result = $query->execute(array($user,'photo','path'))->fetchAll();
 
-if ( $result[0] and $result[0]['configvalue'] ) {
-
-	$img = $result[0]['configvalue'];
-	
-	$fileView = new \OC\Files\View('/' . $owner . '/files');
-	$mime = $fileView->getMimeType($img);
-
-	list($mimePart,) = explode('/', $mime);
-	if ($mimePart === 'image') {
-		$local = $fileView->getLocalFile($img);
-		$rotate = false;
-		if (is_callable('exif_read_data')) { //don't use OC_Image here, using OC_Image will always cause parsing the image file
-			$exif = @exif_read_data($local, 'IFD0');
-			if (isset($exif['Orientation'])) {
-				$rotate = ($exif['Orientation'] > 1);
-			}
-		}
-		if ($rotate) {
-			$image = new OC_Image($local);
-			$image->fixOrientation();
-			$image->show();
-		} else { //use the original file if we dont need to rotate, saves having to re-encode the image
-			header('Content-Type: ' . $mime);
-			readfile($local);
-		}
-	}
-	
-} else {
-
-	$local = OC_App::getAppPath('user_photo')."/img/photo.jpg";
-	$image = new OC_Image($local);
-	$image->show();
-	#OC_JSON::error(var_dump($local));die();
-
+if (count($result) > 0) {
+    $path = $result[0]['configvalue'];
 }
 
+$image = new \OC_Image ;
+$result = $image->load($path);
 
+if (!$result) {
+    $image->load('apps/user_photo/img/photo.jpg');
+}
 
+return $image->show();

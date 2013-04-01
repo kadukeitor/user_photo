@@ -5,10 +5,10 @@ var UserPhoto = {
 			path : path
 		}, function(result) {
 			if (result.status == 'success') {
-				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
-				OC.dialogs.info(result.data.message, 'User Photo');
+				document.getElementById('photoimg').src = result.data.webROOT + '/?app=user_photo&getfile=' + encodeURIComponent('ajax/showphoto.php') + '&user=' + result.data.user;
+				OC.dialogs.alert(result.data.message, 'User Photo');
 			} else {
-				OC.dialogs.info(result.data.message, 'An error occurred!');
+				OC.dialogs.alert(result.data.message, 'An error occurred!');
 			}
 		});
 	},
@@ -18,7 +18,7 @@ var UserPhoto = {
 			path : path
 		}, function(result) {
 			if (result.status == 'success') {
-				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
+				document.getElementById('photoimg').src = result.data.webROOT + '/?app=user_photo&getfile=' + encodeURIComponent('ajax/showphoto.php') + '&user=' + result.data.user;
 				OC.dialogs.alert(result.data.message, 'User Photo');
 			} else {
 				OC.dialogs.alert(result.data.message, 'An error occurred!');

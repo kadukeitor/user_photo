@@ -29,7 +29,7 @@ $path = isset($_POST['path']) ? $_POST['path'] : '';
 
 if (!empty($path)) {
     if (OC_Filesystem::is_file($path)) {
-        OC_Preferences::setValue( OCP\USER::getUser() , 'photo', 'path', $path );
+        OC_Preferences::setValue( OCP\USER::getUser() , 'photo', 'path', OC_Filesystem::getLocalFile($path) );
         OCP\JSON::success(array('data' => array( 'webROOT' => OC::$WEBROOT , 'user' => OCP\USER::getUser() , 'message' => 'The photo has been updated' )));
     } else {
         OCP\JSON::error(array('data' => array( 'message' => 'Invalid file path supplied.')));

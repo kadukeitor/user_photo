@@ -3,8 +3,8 @@
 	<id>user_photo</id>
 	<name>User Photo</name>
 	<description>Supply a field to store the user's photo</description>
-	<version>0.5</version>
+	<version>0.3</version>
 	<licence>AGPL</licence>
 	<author>Jorge Rafael Garcia Ramos</author>
-	<require>4.93</require>
+	<require>4.9</require>
 </info>
