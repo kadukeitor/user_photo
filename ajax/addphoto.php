@@ -25,7 +25,7 @@ OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('user_photo');
 OCP\JSON::callCheck();
 
-$path = isset($_POST['path']) ? $_POST['path'] : '';
+$path = OC_Util::sanitizeHTML($_POST['path']) ;
 
 if (!empty($path)) {
     if (OC_Filesystem::is_file($path)) {

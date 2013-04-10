@@ -25,13 +25,9 @@ OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('user_photo');
 
 $owner = OC_Util::sanitizeHTML($_GET['user']) ;
+$img   = OC_Preferences::getValue( $owner , 'photo', 'path' );
 
-$query = OCP\DB::prepare("SELECT configvalue FROM *PREFIX*preferences WHERE userid = ? AND appid = ? AND configkey = ? LIMIT 1");
-$result = $query->execute(array($owner,'photo','path'))->fetchAll();
-
-if ( $result[0] and $result[0]['configvalue'] ) {
-
-	$img = $result[0]['configvalue'];
+if ( $img ) {
 	
 	$fileView = new \OC\Files\View('/' . $owner . '/files');
 	$mime = $fileView->getMimeType($img);
@@ -61,7 +57,6 @@ if ( $result[0] and $result[0]['configvalue'] ) {
 	$local = OC_App::getAppPath('user_photo')."/img/photo.jpg";
 	$image = new OC_Image($local);
 	$image->show();
-	#OC_JSON::error(var_dump($local));die();
 
 }
 

@@ -25,10 +25,10 @@ OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('user_photo');
 OCP\JSON::callCheck();
 
-$exist = OC_Preferences::getValue( OCP\USER::getUser() , 'photo', 'path', 0 );
+$exist = OC_Preferences::getValue( OCP\USER::getUser() , 'photo', 'path' );
 
 if ($exist) {
-    OC_Preferences::setValue( OCP\USER::getUser() , 'photo', 'path');
+    OC_Preferences::deleteKey( OCP\USER::getUser() , 'photo', 'path');
     OCP\JSON::success(array('data' => array( 'webROOT' => OC::$WEBROOT , 'user' => OCP\USER::getUser() ,'message' => 'The photo has been deleted' )));
 } else {
     OCP\JSON::error(array('data' => array( 'message' => 'This user does not have photo' )));
