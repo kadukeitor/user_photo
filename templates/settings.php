@@ -5,5 +5,7 @@
         <br>
         <input id="chosephotobutton" type="submit" value="Change Photo" original-title>
         <input id="delphotobutton" type="submit" value="Delete Photo" original-title>
+		<input id="usegravitarbutton" type="submit" value="Use Gravitar" original-title>
+
     </fieldset>
 </form>
