@@ -25,6 +25,18 @@ var UserPhoto = {
 			}
 		});
 	},
+	Gravitar : function(path) {
+		var data = $.post(OC.filePath('user_photo', 'ajax', 'gravitar.php'), {
+			path : path
+		}, function(result) {
+			if (result.status == 'success') {
+				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
+				OC.dialogs.alert(result.data.message, 'User Photo');
+			} else {
+				OC.dialogs.alert(result.data.message, 'An error occurred!');
+			}
+		});
+	},
 }
 
 $(document).ready(function() {
@@ -36,4 +48,11 @@ $(document).ready(function() {
 		UserPhoto.Delete();
 		return false;
 	});
+	$("#usegravitarbutton").click(function() {
+
+		UserPhoto.Gravitar();
+		return false;
+	});
+
+
 }); 
