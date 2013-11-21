@@ -1,15 +1,10 @@
 <?php
 
-    OCP\App::checkAppEnabled('user_photo');
+OCP\App::checkAppEnabled('user_photo');
 
-    $tmpl = new OCP\Template('user_photo', 'settings');
+$tmpl = new OCP\Template('user_photo', 'settings');
 
-    $tmpl->assign('webROOT', OC::$WEBROOT );
-    $tmpl->assign('user',OCP\USER::getUser());
+$tmpl->assign('webROOT', OC::$WEBROOT);
+$tmpl->assign('user', OCP\USER::getUser());
 
-    return $tmpl->fetchPage();
-
-    
-    
-    
-    
+return $tmpl->fetchPage();

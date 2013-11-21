@@ -1,43 +1,28 @@
 var UserPhoto = {
-
-	Load : function(path) {
-		var data = $.post(OC.filePath('user_photo', 'ajax', 'addphoto.php'), {
-			path : path
-		}, function(result) {
-			if (result.status == 'success') {
-				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
-				OC.dialogs.info(result.data.message, 'User Photo');
-			} else {
-				OC.dialogs.info(result.data.message, 'An error occurred!');
-			}
-		});
+	_callback: function(result) {
+		if (result.status === 'success') {
+			document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') + '?user=' + result.data.user + '&ts=' + Date.now();
+			OC.dialogs.info(result.data.message, 'User Photo');
+		} else {
+			OC.dialogs.info(result.data.message, 'An error occurred!');
+		}
 	},
-
-	Delete : function(path) {
-		var data = $.post(OC.filePath('user_photo', 'ajax', 'deletephoto.php'), {
-			path : path
-		}, function(result) {
-			if (result.status == 'success') {
-				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
-				OC.dialogs.alert(result.data.message, 'User Photo');
-			} else {
-				OC.dialogs.alert(result.data.message, 'An error occurred!');
-			}
-		});
+	Load: function(path) {
+		$.post(OC.filePath('user_photo', 'ajax', 'addphoto.php'), {
+			path: path
+		}, UserPhoto._callback);
 	},
-	Gravitar : function(path) {
-		var data = $.post(OC.filePath('user_photo', 'ajax', 'gravitar.php'), {
-			path : path
-		}, function(result) {
-			if (result.status == 'success') {
-				document.getElementById('photoimg').src = OC.filePath('user_photo', 'ajax', 'showphoto.php') +'?user=' + result.data.user;
-				OC.dialogs.alert(result.data.message, 'User Photo');
-			} else {
-				OC.dialogs.alert(result.data.message, 'An error occurred!');
-			}
-		});
+	Delete: function(path) {
+		$.post(OC.filePath('user_photo', 'ajax', 'deletephoto.php'), {
+			path: path
+		}, UserPhoto._callback);
 	},
-}
+	Gravatar: function(path) {
+		$.post(OC.filePath('user_photo', 'ajax', 'addphoto.php'), {
+			gravatar: 1
+		}, UserPhoto._callback);
+	}
+};
 
 $(document).ready(function() {
 	$("#chosephotobutton").click(function() {
@@ -48,11 +33,8 @@ $(document).ready(function() {
 		UserPhoto.Delete();
 		return false;
 	});
-	$("#usegravitarbutton").click(function() {
-
-		UserPhoto.Gravitar();
+	$("#usegravatarbutton").click(function() {
+		UserPhoto.Gravatar();
 		return false;
 	});
-
-
 }); 
