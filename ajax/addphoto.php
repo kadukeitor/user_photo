@@ -25,16 +25,23 @@ OCP\JSON::checkLoggedIn();
 OCP\JSON::checkAppEnabled('user_photo');
 OCP\JSON::callCheck();
 
-$path = OC_Util::sanitizeHTML($_POST['path']) ;
+$path = isset($_POST['path']) ? OC_Util::sanitizeHTML($_POST['path']) : null;
 
-if (!empty($path)) {
-    if (OC_Filesystem::is_file($path)) {
-        OC_Preferences::setValue( OCP\USER::getUser() , 'photo', 'path', $path );
-        OCP\JSON::success(array('data' => array( 'webROOT' => OC::$WEBROOT , 'user' => OCP\USER::getUser() , 'message' => 'The photo has been updated' )));
+if (isset($_POST['gravatar']) && $_POST['gravatar']) {
+    $email = OC_Preferences::getValue(OC_User::getUser(), 'settings', 'email', '');
+    if ($email) {
+        OC_Preferences::setValue(OCP\USER::getUser(), 'photo', 'path', 'gravatar.com/avatar/' . md5($email) . '.jpg?r=x&d=identicon');
+        OCP\JSON::success(array('data' => array('webROOT' => OC::$WEBROOT, 'user' => OCP\USER::getUser(), 'message' => 'The photo has been updated')));
     } else {
-        OCP\JSON::error(array('data' => array( 'message' => 'Invalid file path supplied.')));
+        OCP\JSON::error(array('data' => array('message' => 'Please provide your e-mail address first.')));
     }
-
+} elseif (!empty($path)) {
+    if (OC_Filesystem::is_file($path)) {
+        OC_Preferences::setValue(OCP\USER::getUser(), 'photo', 'path', $path);
+        OCP\JSON::success(array('data' => array('webROOT' => OC::$WEBROOT, 'user' => OCP\USER::getUser(), 'message' => 'The photo has been updated')));
+    } else {
+        OCP\JSON::error(array('data' => array('message' => 'Invalid file path supplied.')));
+    }
 } else {
-    OCP\JSON::error(array('data' => array( 'message' => 'Invalid file path supplied.')));
+    OCP\JSON::error(array('data' => array('message' => 'Invalid file path supplied.')));
 }
